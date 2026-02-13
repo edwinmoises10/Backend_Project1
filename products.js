@@ -1,102 +1,177 @@
 //!Import
 
 import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
 
 //!Producs Manager
 
 class ProductManager {
-  constructor() {
-    this.products = [];
+  constructor(filePath) {
+    // this.products = [];
+    this.path = filePath;
   }
 
   getProducts = () => {
-    return this.products;
+    if (fs.existsSync(this.path)) {
+      const productFile = fs.readFileSync(this.path, "utf-8");
+      return JSON.parse(productFile);
+    } else {
+      return [];
+    }
   };
 
-  productSearchByID = (itemID) => {
-    const prod_ID = this.products.find((e) => e.id === itemID);
+  productByID = (itemID) => {
+    const products = this.getProducts();
+
+    const prod_ID = products.find((e) => e.id === itemID);
     if (!prod_ID) throw new Error("Product Not Found");
     return prod_ID;
   };
 
   addProduct = (body) => {
-    const produc = {
+    const products = this.getProducts();
+
+    const product = {
       id: uuidv4(),
       ...body,
     };
 
     //!TITLE
-    if (!produc.title || typeof produc.title !== "string")
-      throw new Error("Tittle is required");
-    produc.title =
-      produc.title.charAt(0).toUpperCase() +
-      produc.title.slice(1).toLowerCase();
+    if (!product.title || typeof product.title !== "string")
+      throw new Error("Title is required");
+    product.title =
+      product.title.charAt(0).toUpperCase() + product.title.slice(1);
 
     //!DESCRIPTION
-    if (!produc.description || typeof produc.description !== "string")
+    if (!product.description || typeof product.description !== "string")
       throw new Error("Description is required");
-    produc.description = produc.description.charAt(0).toUpperCase();
+    product.description =
+      product.description.charAt(0).toUpperCase() +
+      product.description.slice(1);
 
     //!PRICE
-    if (typeof produc.price !== "number" || produc.price <= 0 )
+    if (
+      typeof product.price !== "number" ||
+      Number.isNaN(product.price) ||
+      product.price <= 0
+    )
       throw new Error("Price must be greater than 0");
 
     //!CODE VALIDATION
-    const checkCode = this.products.find((c) => c.code === produc.code);
+    const checkCode = products.find((c) => c.code === product.code);
     if (checkCode) throw new Error("Duplicate product code");
 
     //!Stock
-    if (typeof produc.stock !== "number" || produc.stock < 0 ) throw new Error("Stock cannot be less than 0");
+    if (typeof product.stock !== "number" || product.stock < 0)
+      throw new Error("Stock cannot be less than 0");
 
     //!CATEGORY
-    if (!produc.category || typeof produc.category !== "string") throw new Error("Category is required");
+    if (!product.category || typeof product.category !== "string")
+      throw new Error("Category is required");
 
     //!STATUS
-    if (typeof produc.status !== "boolean")
-      throw new Error("Status is requiered True/False");
-    this.products.push(produc);
+    if (typeof product.status !== "boolean")
+      throw new Error("Status is Required True/False");
 
-    return produc;
+    products.push(product);
+    fs.writeFileSync(this.path, JSON.stringify(products));
+    return product;
   };
 
-  editProduct = (id) => {
-    const products = this.products;
-    const editProduct = products.find((item) => item.id === id);
-    if (!editProduct) throw new Error(`Product ${id} not found`);
+  editProduct = (idProduct, body) => {
+    const products = this.getProducts();
+
+    const prod_ID = products.find((e) => e.id === idProduct);
+    if (!prod_ID) throw new Error("Product Not Found");
+
+    if (body.title) {
+      if (typeof body.title !== "string") throw new Error("Title is required");
+      body.title = body.title.charAt(0).toUpperCase() + body.title.slice(1);
+    }
+
+    //!DESCRIPTION
+
+    if (body.description) {
+      if (!body.description || typeof body.description !== "string")
+        throw new Error("Description is required");
+      body.description =
+        body.description.charAt(0).toUpperCase() + body.description.slice(1);
+    }
+
+    //!PRICE
+    if (body.price) {
+      if (
+        typeof body.price !== "number" ||
+        Number.isNaN(body.price) ||
+        body.price <= 0
+      )
+        throw new Error("Price must be greater than 0");
+    }
+
+    //!CODE
+
+    if (body.code) {
+      if (Number.isNaN(prod_ID.code) || prod_ID.code <= 0)
+        throw new Error("Code cannot be less than 0");
+    }
+
+    //!Stock
+    if (body.stock) {
+      if (typeof body.stock !== "number" || body.stock < 0)
+        throw new Error("Stock cannot be less than 0");
+    }
+
+    //!CATEGORY
+
+    if (body.category) {
+      if (typeof body.category !== "string")
+        throw new Error("Category is required");
+    }
+
+    //!STATUS
+    if (body.status) {
+      if (typeof body.status !== "boolean")
+        throw new Error("Status is Required True/False");
+    }
+
+    const { id } = prod_ID;
+
+    const product = { ...prod_ID, ...body, id: id };
+
+    const findIndex = products.findIndex((i) => i.id === id);
+    products[findIndex] = product;
+    fs.writeFileSync(this.path, JSON.stringify(products));
+    return product;
   };
 
-  deleteProduct = () => {
-    this.products.length = 0;
-    this.products = [];
+  deleteProduct = (id) => {
+    const products = this.getProducts();
+
+    const removalIndex = products.findIndex((i) => i.id === id);
+    if (removalIndex <= -1) throw new Error("Product not found");
+
+    if (removalIndex >= 0) {
+      products.splice(removalIndex, 1);
+      fs.writeFileSync(this.path, JSON.stringify(products));
+    }
   };
 }
 
 //! Create an Instance
 
-const product = new ProductManager();
-
-// product.addProduct({});
+const product = new ProductManager("./products.json");
 
 // product.addProduct({
-//   title: "Adidas Shoes",
-//   description: "Samba",
-//   code: "qa1swsd",
-//   price: 120.23,
+//   title: "Adidas",
+//   description: "Jordan Air",
+//   code: "xl23",
+//   price: 100.2,
 //   status: true,
-//   stock: 3,
-//   category: "Sport",
-//   ththumbnail: "Ruta Strings",
+//   stock: 10,
+//   category: "Casual",
+//   thumbnails: "PICIMG",
 // });
+product.editProduct("7814ff77-2990-445d-a0dd-9d1a1267d6f3", { price: 300, category: "Sport TC" });
 
-// product.addProduct({
-//   title: "Puma Shoes",
-//   description: "Extreme",
-//   code: "qa1swsd",
-//   price: 110.23,
-//   status: false,
-//   stock: 5,
-//   category: "Sport",
-//   ththumbnail: "Ruta Strings",
-// });
 
-console.log(product.getProducts());
+console.log(product.productByID("7814ff77-2990-445d-a0dd-9d1a1267d6f3"));

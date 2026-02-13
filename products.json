@@ -1,0 +1,24 @@
+[
+    {
+        "id": "9dafaaf0-de19-471e-baf2-17044f089afc",
+        "title": "N",
+        "description": "Jordan air",
+        "code": "aqwd2",
+        "price": 100.2,
+        "status": true,
+        "stock": 10,
+        "category": "Casual",
+        "thumbnails": "PICIMG"
+    },
+    {
+        "id": "7814ff77-2990-445d-a0dd-9d1a1267d6f3",
+        "title": "N",
+        "description": "Jordan air",
+        "code": "aqw7hd2",
+        "price": 300,
+        "status": true,
+        "stock": 10,
+        "category": "Sport TC",
+        "thumbnails": "PICIMG"
+    }
+]
