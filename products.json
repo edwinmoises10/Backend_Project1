@@ -42,19 +42,5 @@
         "stock": 10,
         "category": "Casual",
         "thumbnails": "PICIMG"
-    },
-    {
-        "id": "ff9abc10-603f-4c62-9dbc-ebefed928e09",
-        "title": "Postman Title",
-        "description": "Edit Params by ID.",
-        "code": "fgdfgdf",
-        "price": 12,
-        "status": true,
-        "stock": 25,
-        "category": "Urban",
-        "thumbnails": [
-            "https://placehold.co/600x400?text=Nike+Air+Max+1",
-            "https://placehold.co/600x400?text=Nike+Air+Max+2"
-        ]
     }
 ]

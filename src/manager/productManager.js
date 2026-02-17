@@ -32,8 +32,8 @@ class ProductManager {
     const products = this.getProducts();
 
     const product = {
-      id: uuidv4(),
       ...body,
+      id: uuidv4(),
     };
 
     //!TITLE
@@ -101,7 +101,8 @@ class ProductManager {
 
     //!PRICE
     if (body.price !== undefined) {
-      if (!body.price ||
+      if (
+        !body.price ||
         typeof body.price !== "number" ||
         Number.isNaN(body.price) ||
         body.price <= 0
@@ -112,13 +113,13 @@ class ProductManager {
     //!CODE
 
     if (body.code !== undefined) {
-      if (!body.code ||typeof body.code !== "string")
+      if (!body.code || typeof body.code !== "string")
         throw new Error("Code be required");
     }
 
     //!Stock
-    if (body.stock) {
-      if (typeof body.stock !== "number" || body.stock < 0)
+    if (body.stock !== undefined) {
+      if (!body.stock || typeof body.stock !== "number" || body.stock < 0)
         throw new Error("Stock cannot be less than 0");
     }
 
@@ -130,7 +131,7 @@ class ProductManager {
     }
 
     //!STATUS
-    if (body.status) {
+    if (body.status !== undefined) {
       if (typeof body.status !== "boolean")
         throw new Error("Status is Required True/False");
     }
@@ -149,12 +150,11 @@ class ProductManager {
     const products = this.getProducts();
 
     const removalIndex = products.findIndex((i) => i.id === id);
-    if (removalIndex <= -1) throw new Error("Product not found");
 
-    if (removalIndex >= 0) {
-      products.splice(removalIndex, 1);
-      fs.writeFileSync(this.path, JSON.stringify(products));
-    }
+    if (removalIndex === -1) throw new Error("Product not found");
+
+    products.splice(removalIndex, 1);
+    fs.writeFileSync(this.path, JSON.stringify(products));
   };
 }
 
