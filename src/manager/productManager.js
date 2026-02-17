@@ -100,8 +100,8 @@ class ProductManager {
     }
 
     //!PRICE
-    if (body.price) {
-      if (
+    if (body.price !== undefined) {
+      if (!body.price ||
         typeof body.price !== "number" ||
         Number.isNaN(body.price) ||
         body.price <= 0
