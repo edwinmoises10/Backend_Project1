@@ -51,16 +51,3 @@ La persistencia de datos se maneja mediante **FileSystem** (archivos JSON), impl
 | **PUT** | `/:pid` | Actualiza un producto (El ID no se modifica). |
 | **DELETE**| `/:pid` | Elimina el producto indicado. |
 
-#### Estructura del Objeto Producto (POST):
-Todos los campos son obligatorios excepto `thumbnails`.
-```json
-{
-  "title": "Monitor Curvo Samsung",
-  "description": "27 pulgadas, 144Hz",
-  "code": "MON-001",
-  "price": 350,
-  "status": true,
-  "stock": 25,
-  "category": "Periféricos",
-  "thumbnails": ["img1.jpg", "img2.jpg"] 
-}
