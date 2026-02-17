@@ -25,6 +25,7 @@ app.get("/api/products/:pid", (req, res) => {
     res.status(200).json(idProduct);
   } catch (error) {
     if (error.message === "Product Not Found") {
+
       return res.status(404).json({
         error: error.message,
       });
