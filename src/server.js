@@ -100,6 +100,12 @@ app.post("/api/carts/:cid/product/:pid", (req, res) => {
     const { cid } = req.params;
     const { pid } = req.params;
 
+    const checkProduct = productManager.productByID(pid);
+
+    if (!checkProduct) {
+      return res.status(404).json({ message: "Product not found in inventory" });
+    }
+
     const updateCart = cartManager.addItemsToCart(cid, pid);
     res.status(201).json(updateCart);
   } catch (error) {

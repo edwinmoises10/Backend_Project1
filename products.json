@@ -1,46 +1,44 @@
 [
     {
-        "id": "9dafaaf0-de19-471e-baf2-17044f089afc",
-        "title": "N",
-        "description": "Jordan air",
-        "code": "aqwd2",
-        "price": 100.2,
+        "title": "POSTMAN CREATE PRODUCT",
+        "description": "POSTMAN Description",
+        "code": "NK-AMP-2026-01",
+        "price": 182.99,
         "status": true,
-        "stock": 10,
-        "category": "Casual",
-        "thumbnails": "PICIMG"
+        "stock": 5,
+        "category": "Classis",
+        "thumbnails": [
+            "https://placehold.co/600x400?text=Nike+Air+Max+1",
+            "https://placehold.co/600x400?text=Nike+Air+Max+2"
+        ],
+        "id": "5dc4a6c0-f04d-498b-9bed-104a35401a18"
     },
     {
-        "id": "7814ff77-2990-445d-a0dd-9d1a1267d6f3",
-        "title": "N",
-        "description": "Jordan air",
-        "code": "aqw7hd2",
-        "price": 300,
+        "title": "Nike ",
+        "description": "Description",
+        "code": "NK-AMP-20a26-01",
+        "price": 87.99,
         "status": true,
-        "stock": 10,
-        "category": "Sport TC",
-        "thumbnails": "PICIMG"
+        "stock": 5,
+        "category": "Classis",
+        "thumbnails": [
+            "https://placehold.co/600x400?text=Nike+Air+Max+1",
+            "https://placehold.co/600x400?text=Nike+Air+Max+2"
+        ],
+        "id": "52c52941-ab39-4f33-a17e-d9a6563c9ef1"
     },
     {
-        "id": "a4c27455-ea2b-4794-878e-dcdaf8c50ae0",
-        "title": "Adidas",
-        "description": "Jordan Air",
-        "code": "xl23",
-        "price": 100.2,
+        "title": "Adidas ",
+        "description": "Description",
+        "code": "NK-AMP-10a26-01",
+        "price": 87.99,
         "status": true,
-        "stock": 10,
-        "category": "Casual",
-        "thumbnails": "PICIMG"
-    },
-    {
-        "id": "7e464707-0628-4792-9999-cedbba1aa2ce",
-        "title": "Adidas",
-        "description": "Jordan Air",
-        "code": "xla23",
-        "price": 100.2,
-        "status": true,
-        "stock": 10,
-        "category": "Casual",
-        "thumbnails": "PICIMG"
+        "stock": 5,
+        "category": "Classis",
+        "thumbnails": [
+            "https://placehold.co/600x400?text=Nike+Air+Max+1",
+            "https://placehold.co/600x400?text=Nike+Air+Max+2"
+        ],
+        "id": "34cc2bf4-84a9-4e35-9011-cfd92e739ac8"
     }
 ]

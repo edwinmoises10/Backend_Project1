@@ -24,7 +24,7 @@ class ProductManager {
     const products = this.getProducts();
 
     const prod_ID = products.find((e) => e.id === itemID);
-    if (!prod_ID) throw new Error("Product Not Found");
+    if (!prod_ID) throw new Error("Product Not Found in DB");
     return prod_ID;
   };
 
