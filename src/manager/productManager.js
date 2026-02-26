@@ -160,6 +160,24 @@ class ProductManager {
 
 //! Create an Instance
 
+<<<<<<< HEAD
 export const productManager = new ProductManager(`../data/products.json`);
 
 productManager.getProducts()
+=======
+export const productManager = new ProductManager(`./products.json`);
+
+// product.addProduct({
+//   title: "Adidas",
+//   description: "Jordan Air",
+//   code: "xla23",
+//   price: 100.2,
+//   status: true,
+//   stock: 10,
+//   category: "Casual",
+//   thumbnails: "PICIMG",
+// });
+// product.editProduct("7814ff77-2990-445d-a0dd-9d1a1267d6f3", { price: 300, category: "Sport TC" });
+
+// console.log(product.productByID("7814ff77-2990-445d-a0dd-9d1a1267d6f3"));
+>>>>>>> a73b9d462ab83be1b217787c5f945ce8b99b4644
