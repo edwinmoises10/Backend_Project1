@@ -2,76 +2,54 @@
 
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
+import { ProductSchema } from "../schemas/product.schema.js";
+import { ERRORS, zodErrors } from "../utils/errorDictionary.js";
 
 //!Producs Manager
 
 class ProductManager {
   constructor(filePath) {
-    // this.products = [];
     this.path = filePath;
+
+    if (!fs.existsSync(this.path)) {
+      fs.writeFileSync(this.path, JSON.stringify([]));
+    }
   }
 
   getProducts = () => {
-    if (fs.existsSync(this.path)) {
-      const productFile = fs.readFileSync(this.path, "utf-8");
-      return JSON.parse(productFile);
-    } else {
-      return [];
-    }
+    return fs.existsSync(this.path)
+      ? JSON.parse(fs.readFileSync(this.path, "utf-8"))
+      : [];
   };
 
   productByID = (itemID) => {
     const products = this.getProducts();
-
     const prod_ID = products.find((e) => e.id === itemID);
-    if (!prod_ID) throw new Error("Product Not Found in DB");
+    if (!prod_ID) throw new Error(ERRORS.PRODUCT_NOT_FOUND);
     return prod_ID;
   };
 
   addProduct = (body) => {
     const products = this.getProducts();
 
+    const paramsValidation = ProductSchema.safeParse(body);
+
+    if (!paramsValidation.success) {
+      const checkError = paramsValidation.error.issues
+        .map((e) => zodErrors(e))
+        .join();
+      throw new Error(checkError);
+    }
+
+    const checkCode = products.some(
+      (e) => e.code === paramsValidation.data.code,
+    );
+    if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
+
     const product = {
-      ...body,
+      ...paramsValidation.data,
       id: uuidv4(),
     };
-
-    //!TITLE
-    if (!product.title || typeof product.title !== "string")
-      throw new Error("Title is required");
-    product.title =
-      product.title.charAt(0).toUpperCase() + product.title.slice(1);
-
-    //!DESCRIPTION
-    if (!product.description || typeof product.description !== "string")
-      throw new Error("Description is required");
-    product.description =
-      product.description.charAt(0).toUpperCase() +
-      product.description.slice(1);
-
-    //!PRICE
-    if (
-      typeof product.price !== "number" ||
-      Number.isNaN(product.price) ||
-      product.price <= 0
-    )
-      throw new Error("Price must be greater than 0");
-
-    //!CODE VALIDATION
-    const checkCode = products.find((c) => c.code === product.code);
-    if (checkCode) throw new Error("Duplicate product code");
-
-    //!Stock
-    if (typeof product.stock !== "number" || product.stock < 0)
-      throw new Error("Stock cannot be less than 0");
-
-    //!CATEGORY
-    if (!product.category || typeof product.category !== "string")
-      throw new Error("Category is required");
-
-    //!STATUS
-    if (typeof product.status !== "boolean")
-      throw new Error("Status is Required True/False");
 
     products.push(product);
     fs.writeFileSync(this.path, JSON.stringify(products));
@@ -82,63 +60,26 @@ class ProductManager {
     const products = this.getProducts();
 
     const prod_ID = products.find((e) => e.id === idProduct);
-    if (!prod_ID) throw new Error("Product Not Found");
+    if (!prod_ID) throw new Error(ERRORS.PRODUCT_NOT_FOUND);
 
-    if (body.title !== undefined) {
-      if (!body.title || typeof body.title !== "string")
-        throw new Error("Title is required");
-      body.title = body.title.charAt(0).toUpperCase() + body.title.slice(1);
+    const checkParams = ProductSchema.partial().safeParse(body);
+
+    if (!checkParams.success) {
+      const checkError = checkParams.error.issues
+        .map((e) => zodErrors(e))
+        .join();
+      throw new Error(checkError);
     }
 
-    //!DESCRIPTION
+    const checkCode = products.some(
+      (e) => e.code === checkParams.data.code,
+    );
 
-    if (body.description !== undefined) {
-      if (!body.description || typeof body.description !== "string")
-        throw new Error("Description is required");
-      body.description =
-        body.description.charAt(0).toUpperCase() + body.description.slice(1);
-    }
-
-    //!PRICE
-    if (body.price !== undefined) {
-      if (
-        !body.price ||
-        typeof body.price !== "number" ||
-        Number.isNaN(body.price) ||
-        body.price <= 0
-      )
-        throw new Error("Price must be greater than 0");
-    }
-
-    //!CODE
-
-    if (body.code !== undefined) {
-      if (!body.code || typeof body.code !== "string")
-        throw new Error("Code be required");
-    }
-
-    //!Stock
-    if (body.stock !== undefined) {
-      if (!body.stock || typeof body.stock !== "number" || body.stock < 0)
-        throw new Error("Stock cannot be less than 0");
-    }
-
-    //!CATEGORY
-
-    if (body.category !== undefined) {
-      if (typeof body.category !== "string")
-        throw new Error("Category is required");
-    }
-
-    //!STATUS
-    if (body.status !== undefined) {
-      if (typeof body.status !== "boolean")
-        throw new Error("Status is Required True/False");
-    }
+    if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
 
     const { id } = prod_ID; //!Mantengo ID original !!
 
-    const product = { ...prod_ID, ...body, id: id };
+    const product = { ...prod_ID, ...checkParams.data, id: id };
 
     const findIndex = products.findIndex((i) => i.id === id);
     products[findIndex] = product;
@@ -160,7 +101,7 @@ class ProductManager {
 
 //! Create an Instance
 
-export const productManager = new ProductManager(`./products.json`);
+export const productManager = new ProductManager(`./data/products.json`);
 
 // product.addProduct({
 //   title: "Adidas",

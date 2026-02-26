@@ -25,11 +25,9 @@ app.get("/api/products/:pid", (req, res) => {
     const idProduct = productManager.productByID(pid);
     res.status(200).json(idProduct);
   } catch (error) {
-    if (error.message === "Product Not Found") {
-      return res.status(404).json({
-        error: error.message,
-      });
-    }
+    return res.status(404).json({
+      error: error.message,
+    });
   }
 });
 
@@ -38,7 +36,7 @@ app.post("/", (req, res) => {
     const newProduct = productManager.addProduct(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    return res.status(400).json({
+    return res.status(422).json({
       error: error.message,
     });
   }
@@ -50,13 +48,7 @@ app.put("/api/products/:pid", (req, res) => {
     const editProduct = productManager.editProduct(pid, req.body);
     res.status(200).json(editProduct);
   } catch (error) {
-    if (error.message === "Product Not Found") {
-      return res.status(404).json({
-        error: error.message,
-      });
-    }
-
-    return res.status(400).json({
+    return res.status(422).json({
       error: error.message,
     });
   }
@@ -103,7 +95,9 @@ app.post("/api/carts/:cid/product/:pid", (req, res) => {
     const checkProduct = productManager.productByID(pid);
 
     if (!checkProduct) {
-      return res.status(404).json({ message: "Product not found in inventory" });
+      return res
+        .status(404)
+        .json({ message: "Product not found in inventory" });
     }
 
     const updateCart = cartManager.addItemsToCart(cid, pid);
