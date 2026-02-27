@@ -32,22 +32,11 @@ class ProductManager {
   addProduct = (body) => {
     const products = this.getProducts();
 
-    const paramsValidation = ProductSchema.safeParse(body);
-
-    if (!paramsValidation.success) {
-      const checkError = paramsValidation.error.issues
-        .map((e) => zodErrors(e))
-        .join();
-      throw new Error(checkError);
-    }
-
-    const checkCode = products.some(
-      (e) => e.code === paramsValidation.data.code,
-    );
+    const checkCode = products.some((e) => e.code === body.code);
     if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
 
     const product = {
-      ...paramsValidation.data,
+      ...body,
       id: uuidv4(),
     };
 
@@ -71,9 +60,7 @@ class ProductManager {
       throw new Error(checkError);
     }
 
-    const checkCode = products.some(
-      (e) => e.code === checkParams.data.code,
-    );
+    const checkCode = products.some((e) => e.code === checkParams.data.code);
 
     if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
 
@@ -89,30 +76,12 @@ class ProductManager {
 
   deleteProduct = (id) => {
     const products = this.getProducts();
-
     const removalIndex = products.findIndex((i) => i.id === id);
-
-    if (removalIndex === -1) throw new Error("Product not found");
-
+    if (removalIndex === -1) throw new Error(ERRORS.PRODUCT_NOT_FOUND);
     products.splice(removalIndex, 1);
     fs.writeFileSync(this.path, JSON.stringify(products));
   };
 }
 
 //! Create an Instance
-
 export const productManager = new ProductManager(`./data/products.json`);
-
-// product.addProduct({
-//   title: "Adidas",
-//   description: "Jordan Air",
-//   code: "xla23",
-//   price: 100.2,
-//   status: true,
-//   stock: 10,
-//   category: "Casual",
-//   thumbnails: "PICIMG",
-// });
-// product.editProduct("7814ff77-2990-445d-a0dd-9d1a1267d6f3", { price: 300, category: "Sport TC" });
-
-// console.log(product.productByID("7814ff77-2990-445d-a0dd-9d1a1267d6f3"));

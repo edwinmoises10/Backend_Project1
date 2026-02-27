@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
+import { ERRORS } from "../utils/errorDictionary.js";
 
 class CartManager {
   constructor(path) {
@@ -34,7 +35,7 @@ class CartManager {
 
     const cartByID = carts.find((e) => e.id === cid);
 
-    if (!cartByID) throw new Error`Product not found`();
+    if (!cartByID) throw new Error(ERRORS.PRODUCT_NOT_FOUND);
 
     return cartByID;
   };
@@ -44,13 +45,11 @@ class CartManager {
 
     const cartIndex = carts.findIndex((e) => e.id === cid);
     if (cartIndex === -1) {
-      throw new Error`Cart not found`();
+      throw new Error(ERRORS.CART_NOT_FOUND);
     }
     const productIndex = carts[cartIndex].products.findIndex(
       (e) => e.product === pid,
     );
-
-
 
     if (productIndex !== -1) {
       carts[cartIndex].products[productIndex].quantity++;
