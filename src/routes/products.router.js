@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { productManager } from "../manager/productManager.js";
-import { verifyProductInputs } from "../middleware/product.middleware.js";
+import { verifyProductInputs, verifyProductsModifier } from "../middleware/product.middleware.js";
 
 const router = Router();
 
@@ -34,7 +34,7 @@ router.post("/", verifyProductInputs, (req, res) => {
   }
 });
 
-router.put("/:pid", (req, res) => {
+router.put("/:pid", verifyProductsModifier, (req, res) => {
   try {
     const { pid } = req.params;
     const editProduct = productManager.editProduct(pid, req.body);

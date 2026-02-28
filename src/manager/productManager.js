@@ -2,8 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
-import { ProductSchema } from "../schemas/product.schema.js";
-import { ERRORS, zodErrors } from "../utils/errorDictionary.js";
+import { ERRORS } from "../utils/errorDictionary.js";
 
 //!Producs Manager
 
@@ -51,22 +50,13 @@ class ProductManager {
     const prod_ID = products.find((e) => e.id === idProduct);
     if (!prod_ID) throw new Error(ERRORS.PRODUCT_NOT_FOUND);
 
-    const checkParams = ProductSchema.partial().safeParse(body);
+    // const checkCode = products.some((e) => e.code === body.code);
 
-    if (!checkParams.success) {
-      const checkError = checkParams.error.issues
-        .map((e) => zodErrors(e))
-        .join();
-      throw new Error(checkError);
-    }
-
-    const checkCode = products.some((e) => e.code === checkParams.data.code);
-
-    if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
+    // if (checkCode) throw new Error(ERRORS.DUPLICATE_CODE);
 
     const { id } = prod_ID; //!Mantengo ID original !!
 
-    const product = { ...prod_ID, ...checkParams.data, id: id };
+    const product = { ...prod_ID, ...body, id: id };
 
     const findIndex = products.findIndex((i) => i.id === id);
     products[findIndex] = product;

@@ -8,9 +8,18 @@ export const verifyProductInputs = (req, res, next) => {
       .map((e) => zodErrors(e))
       .join();
     console.log(checkError);
-    
 
     return res.status(422).json(checkError);
   }
+  next();
+};
+
+export const verifyProductsModifier = (req, res, next) => {
+  const checkParams = ProductSchema.partial().safeParse(req.body);
+  if (!checkParams.success) {
+    const checkError = checkParams.error.issues.map((e) => zodErrors(e)).join();
+    return res.status(422).json(checkError);
+  }
+
   next();
 };

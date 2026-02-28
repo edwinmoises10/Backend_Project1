@@ -5,7 +5,7 @@ import express from "express";
 
 //!Router
 
-import apiRouter from "./routers/index.js";
+import apiRouter from "./routes/index.js";
 
 //!CODE
 const app = express();
