@@ -1,7 +1,12 @@
+import fs from "fs";
+
 import { Router } from "express";
 import { productManager } from "../manager/productManager.js";
-import { verifyProductInputs, verifyProductsModifier } from "../middleware/product.middleware.js";
-
+import {
+  verifyProductInputs,
+  verifyProductsModifier,
+} from "../middleware/product.middleware.js";
+import { upload } from "../middleware/multer.js";
 const router = Router();
 
 //*EndPoints
@@ -52,6 +57,29 @@ router.delete("/:pid", (req, res) => {
     const deleteProduct = productManager.deleteProduct(pid);
     res.status(200).json(deleteProduct);
   } catch (error) {
+    return res.status(422).json({
+      error: error.message,
+    });
+  }
+});
+
+//!Multer
+
+router.post("/image/", upload.single("image"), (req, res) => {
+  //!Security
+
+  const pathImg = `/images/${req.file.filename}`;
+
+  try {
+    const file = productManager.addProduct({
+      ...req.body,
+      image: pathImg,
+    });
+    res.status(201).json(file);
+  } catch (error) {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
     return res.status(422).json({
       error: error.message,
     });

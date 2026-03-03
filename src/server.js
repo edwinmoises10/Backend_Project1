@@ -9,15 +9,16 @@ import apiRouter from "./routes/index.js";
 
 //!CODE
 const app = express();
-const port = 8080;
+const port = 8081;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//!Multer
+app.use(express.static(`${process.cwd()}/src/public`));
 
 //*EndPoints
 
-app.use('/api', apiRouter);
-
+app.use("/api", apiRouter);
 
 //* Server Listened
 app.listen(`${port}`, () =>
