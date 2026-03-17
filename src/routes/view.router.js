@@ -3,7 +3,7 @@ import { productManager } from "../manager/productManager.js";
 
 const router = Router();
 
-router.get("/main", (req, res) => {
+router.get("/home", (req, res) => {
   const products = productManager.getProducts();
   res.render("home", { products });
 });
