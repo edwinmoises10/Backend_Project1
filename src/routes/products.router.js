@@ -7,6 +7,7 @@ import {
   verifyProductsModifier,
 } from "../middleware/product.middleware.js";
 import { upload } from "../middleware/multer.js";
+
 const router = Router();
 
 //*EndPoints
@@ -31,6 +32,15 @@ router.get("/:pid", (req, res) => {
 router.post("/", verifyProductInputs, (req, res) => {
   try {
     const newProduct = productManager.addProduct(req.body);
+    const io = req.app.get("socketServer");
+
+    const updatedList = productManager.getProducts();
+
+    console.log("Emitiendo lista actualizada...");
+    if (io) {
+      io.emit("productList", updatedList);
+    }
+
     res.status(201).json(newProduct);
   } catch (error) {
     return res.status(422).json({
@@ -55,6 +65,14 @@ router.delete("/:pid", (req, res) => {
   try {
     const { pid } = req.params;
     const deleteProduct = productManager.deleteProduct(pid);
+
+    const io = req.app.get("socketServer");
+    const updatedList = productManager.getProducts();
+
+    if (io) {
+      io.emit("productList", updatedList);
+    }
+
     res.status(200).json(deleteProduct);
   } catch (error) {
     return res.status(422).json({
