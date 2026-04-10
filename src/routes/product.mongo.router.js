@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { productRepository } from "../repositories/product_repository.js";
 import { verifyProductInputs, verifyProductsModifier } from "../middleware/product.middleware.js";
-verifyProductInputs
+
 
 
 const router = Router()

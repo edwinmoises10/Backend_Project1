@@ -6,6 +6,7 @@ import express from "express";
 import handlebars from "express-handlebars";
 import viewRouter from "./routes/view.router.js";
 import productMongoRouter from "./routes/product.mongo.router.js"
+import carMongoRouter from "./routes/cart.mongo.router.js"
 
 //!Router
 
@@ -36,9 +37,10 @@ app.use(express.static(`${process.cwd()}/src/public`));
 //!Conexion con los route ... 
 app.get("/ping", (req, res) => res.send("pong"));
 
-app.use("/api", apiRouter);
+// app.use("/api", apiRouter);
 app.use("/", viewRouter);
-app.use("/products", productMongoRouter)
+app.use("/api/products", productMongoRouter)
+app.use("/api/carts", carMongoRouter)
 
 
 
