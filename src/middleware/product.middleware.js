@@ -5,11 +5,15 @@ export const verifyProductInputs = (req, res, next) => {
   const paramsValidation = ProductSchema.safeParse(req.body);
   if (!paramsValidation.success) {
     const checkError = paramsValidation.error.issues
-      .map((e) => zodErrors(e))
-      .join();
-    console.log(checkError);
+      .map((e) => ({
+        path: e.path[0],
+        message: zodErrors(e)
+      }))
 
-    return res.status(422).json(checkError);
+    return res.status(422).json({
+      status: "error",
+      errors: checkError // Esto devuelve un array de objetos claro
+    })
   }
   next();
 };
