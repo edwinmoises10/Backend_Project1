@@ -37,10 +37,12 @@ app.use(express.static(`${process.cwd()}/src/public`));
 //!Conexion con los route ... 
 app.get("/ping", (req, res) => res.send("pong"));
 
-// app.use("/api", apiRouter);
+app.use("/api/products", productMongoRouter); 
+app.use("/api/carts", carMongoRouter);
+
+app.use("/api", apiRouter);
+
 app.use("/", viewRouter);
-app.use("/api/products", productMongoRouter)
-app.use("/api/carts", carMongoRouter)
 
 
 
@@ -48,11 +50,6 @@ app.use("/api/carts", carMongoRouter)
 const serverHttp = app.listen(`${PORT}`, () =>
   console.log(`Server OK Connected at Port ${PORT}`),
 );
-
-//!MongoDB 
-
-connectMongoDB().then(() => console.log("Conexion Exitosa a Mongo DB")).catch((e) => console.log(`Error al Conectar a Mongo DB ${e.message}`))
-
 // !Socket Part
 const socketServer = new Server(serverHttp);
 socketServer.on("connection", (socket) => {
@@ -66,3 +63,6 @@ socketServer.on("connection", (socket) => {
 
 app.set("socketServer", socketServer);
 
+//!MongoDB 
+
+connectMongoDB().then(() => console.log("Conexion Exitosa a Mongo DB")).catch((e) => console.log(`Error al Conectar a Mongo DB ${e.message}`))
