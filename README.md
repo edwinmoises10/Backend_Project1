@@ -1,4 +1,4 @@
-# Entrega Final: Backend eCommerce
+# Entrega Final: Backend 
 ## Desarrollo de Sistemas Escalables - Coderhouse
 
 Este repositorio contiene la arquitectura completa de un backend para una plataforma de comercio electrónico. El sistema ha sido diseñado con un enfoque en la **integridad de datos**, **escalabilidad** y **comunicación en tiempo real**.
