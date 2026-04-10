@@ -1,21 +1,41 @@
-# 🚀 Entrega N° 1: Servidor Backend E-commerce
+# Entrega Final: Backend eCommerce
+## Desarrollo de Sistemas Escalables - Coderhouse
 
-Este proyecto constituye la primera entrega del curso de Backend. Consiste en un servidor desarrollado con **Node.js** y **Express** que gestiona dos recursos principales: **Productos** y **Carritos**.
+Este repositorio contiene la arquitectura completa de un backend para una plataforma de comercio electrónico. El sistema ha sido diseñado con un enfoque en la **integridad de datos**, **escalabilidad** y **comunicación en tiempo real**.
 
-La persistencia de datos se maneja mediante **FileSystem** (archivos JSON), implementando la lógica a través de las clases `ProductManager` y `CartManager`.
+---
 
-## 📋 Requisitos del Proyecto
+### 🛠️ Stack Tecnológico
 
-* **Puerto:** 8080
-* **Persistencia:** Archivos locales (`products.json`, `carts.json`).
-* **IDs:** Autogenerados (UUID/Numéricos) y únicos. No se permite duplicidad.
+| Tecnología | Descripción |
+| :--- | :--- |
+| **Node.js** | Entorno de ejecución asíncrono. |
+| **Express v5** | Framework web para la gestión de middlewares y ruteo. |
+| **MongoDB Atlas** | Persistencia de datos en la nube (NoSQL). |
+| **Mongoose** | ODM para el modelado y validación de esquemas en MongoDB. |
+| **Socket.io** | Protocolo para actualizaciones de productos en tiempo real. |
+| **Handlebars** | Motor de plantillas para renderizado dinámico del lado del servidor. |
+| **Zod** | Validación estricta de tipos y esquemas en tiempo de ejecución. |
+| **Dotenv** | Gestión segura de variables de entorno (.env). |
 
-## 🛠️ Tecnologías Utilizadas
+---
 
-* **Runtime:** Node.js
-* **Framework:** Express.js
-* **Manejador de Archivos:** Native FileSystem (`fs`)
-* **Librerías:** `uuid` (para generación de IDs).
+### 🏗️ Arquitectura y Patrones de Diseño
+
+El proyecto implementa una arquitectura desacoplada que garantiza el mantenimiento y la robustez del código:
+
+* **Repository Pattern:** Se utiliza una capa de repositorio para abstraer la lógica de acceso a datos, permitiendo alternar entre FileSystem y MongoDB sin afectar la lógica de negocio.
+* **Fail-Fast Validation:** Uso de **Zod** como middleware de validación de entrada, filtrando datos incorrectos antes de que lleguen a la base de datos.
+* **Centralized Error Handling:** Sistema global de manejo de excepciones que intercepta errores técnicos (como claves duplicadas en Mongo) y los transforma en respuestas JSON "humanizadas".
+* **WebSockets Integration:** Sincronización automática entre la API y la vista `/realtimeproducts` mediante eventos de Socket.io.
+
+---
+
+### 🚀 Instalación y Uso
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/edwinmoises10/Backend_Project1.git](https://github.com/edwinmoises10/Backend_Project1.git)
 
 ## ⚙️ Instalación y Ejecución
 
